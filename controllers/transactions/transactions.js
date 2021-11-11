@@ -35,7 +35,7 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   const { user } = req
-  const newTransaction = { ...req.body, owner: user._id }
+  const newTransaction = { ...req.body, owner: user._id, balance: user.balance }
   const result = await Transaction.create(newTransaction)
   res.status(201).json({
     status: 'successfully created',
