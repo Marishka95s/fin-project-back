@@ -2,7 +2,7 @@ const express = require('express')
 
 const { controllerWrapper, validator, authenticate } = require('../../middelwares')
 const { transactions: ctrl } = require('../../controllers')
-const { joiSchema } = require('../../schemas/transactions')
+const { joiSchema } = require('../../schemas/transaction')
 
 const router = express.Router()
 

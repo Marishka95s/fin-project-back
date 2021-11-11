@@ -1,4 +1,4 @@
-const { Transaction } = require('./transactions')
+const { Transaction } = require('./transaction')
 const { User } = require('./users')
 
 module.exports = {
