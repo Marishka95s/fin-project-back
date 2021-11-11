@@ -33,9 +33,7 @@
       "name": "team4",
       "balance": 6900,
       "token": "string",
-      "refreshToken": "string",
-      "verify": false,
-      "verificationToken:": "string"      
+      "refreshToken": "string"    
     },
     {
       "id": "7nsa335ckn5bff4556",
@@ -44,9 +42,7 @@
       "name": "example",
       "balance": 3200,
       "token": "string",
-      "refreshToken": "string",
-      "verify": false,
-      "verificationToken:": "string"
+      "refreshToken": "string"
     }
   ],
   "refreshTokens": [

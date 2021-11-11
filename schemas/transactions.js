@@ -6,6 +6,8 @@ const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@
 
 const phoneRegex = /^[+]{1}[0-9]{2}[-]{1}[0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/
 
+// enum: ['starter', 'pro', 'business'],
+
 const transactionSchema = Schema({
   name: {
     type: String,
