@@ -1,8 +1,8 @@
 const { Unauthorized } = require('http-errors')
 const jwt = require('jsonwebtoken')
-// const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 
-const { User } = require('../../schemas')
+const { User, RefreshToken } = require('../../schemas')
 
 const { SECRET_KEY } = process.env
 
@@ -17,44 +17,28 @@ const login = async (req, res) => {
     return
   }
   const user = await User.findOne({ email })
-  if (!user || !user.verify || !user.comparePassword(password)) {
-    throw new Unauthorized('Email or password is wrong, or email is not verified')
+  if (!user || !user.comparePassword(password)) {
+    throw new Unauthorized('Email or password is wrong')
   }
-  // if (!user) {
-  //   throw new Unauthorized(`Email ${email} not found`)
-  //   res.status(401).json({
-  //     status: 'Unauthorized',
-  //     code: 401,
-  //     message: 'Email or password is wrong'
-  //   })
-  //   return
-  // }
-  // if (!user.comparePassword(password)) {
-  //   throw new Unauthorized('Email or password is wrong')
-  //   res.status(401).json({
-  //     status: 'Unauthorized',
-  //     code: 401,
-  //     message: 'Email or password is wrong'
-  //   })
-  //   return
-  // }
-  // const newUser = new User({ email })
-  // newUser = { email }
-  // newUser.setPassword(password)
-  // newUser = { email, password }
-  // const result = await newUser.save()
 
   const payload = {
     id: user._id
   }
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' })
-  await User.findByIdAndUpdate(user._id, { token })
+  const refreshToken = new RefreshToken({
+    user: user._id,
+    token: crypto.randomBytes(40).toString('hex'),
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  })
+  await refreshToken.save()
+  await User.findByIdAndUpdate(user._id, { token, refreshToken })
 
   res.json({
     status: 'success',
     code: 200,
     token,
+    refreshToken: refreshToken.token,
     user
   })
 }
