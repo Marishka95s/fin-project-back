@@ -1,6 +1,7 @@
 
 const { Schema, model } = require('mongoose')
 const Joi = require('joi')
+const categories = ['Основной', 'Еда', 'Авто', 'Развитие', 'Дети', 'Дом', 'Образование', 'Остальные']
 
 const transactionSchema = Schema({
   type: {
@@ -11,7 +12,8 @@ const transactionSchema = Schema({
   category: {
     type: String,
     required: true,
-    // если х  ограниченое количество  то зделась  enum
+    enum: categories,
+    // если х  ограниченое количество  то зделась  enum.
   },
   sum: {
     type: Number,
@@ -52,5 +54,6 @@ const Transaction = model('transaction', transactionSchema)
 
 module.exports = {
   Transaction,
-  joiSchema
+  joiSchema,
+  categories,
 }

@@ -1,6 +1,8 @@
 const { Transaction } = require('../../schemas')
 const { User } = require('../../schemas')
 
+const { categories } = require('../../schemas')
+
 const listTransactions = async (req, res, next) => {
   const { page = 1, limit = 5, favorite = true } = req.query
   const skip = (page - 1) * limit
@@ -54,7 +56,7 @@ const add = async (req, res, next) => {
     owner: user._id,
     balance
   }
-  
+
   try {
     await User.findByIdAndUpdate(user._id, { balance: balance }, { new: true })
     const result = await Transaction.create(newTransaction)
@@ -130,6 +132,9 @@ const updateTransactionStatusById = async (req, res) => {
     code: 202
   })
 }
+const getCategories = async (req, res) => {
+  res.json({ data: categories })
+}
 
 module.exports = {
   listTransactions,
@@ -137,5 +142,6 @@ module.exports = {
   add,
   updateById,
   removeById,
-  updateTransactionStatusById
+  updateTransactionStatusById,
+  getCategories
 }
