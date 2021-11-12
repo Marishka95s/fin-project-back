@@ -13,7 +13,7 @@ const transactionSchema = Schema({
     type: String,
     required: true,
     enum: categories,
-    // если х  ограниченое количество  то зделась  enum
+    // если х  ограниченое количество  то зделась  enum.
   },
   sum: {
     type: Number,
