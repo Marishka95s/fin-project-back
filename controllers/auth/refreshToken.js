@@ -21,7 +21,7 @@ const refreshingToken = async (req, res) => {
   const refreshToken = await RefreshToken.findOne({ userRefreshToken })
   console.log(refreshToken)
 
-  if (!refreshToken || (Date.now() >= refreshToken.expires) || !refreshToken.revoked) {
+  if (!refreshToken || (Date.now() >= refreshToken.expires) || refreshToken.revoked) {
     res.status(400).json({
       status: 'Bad Request',
       code: 400,
