@@ -8,8 +8,6 @@ const app = require("../app");
 
 const { DB_HOST, PORT = 3030 } = process.env;
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
