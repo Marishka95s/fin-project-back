@@ -1,13 +1,16 @@
-const express = require('express')
+// const express = require('express')
 
-const { controllerWrapper, authenticate, upload, sizeChanger } = require('../../middelwares')
-const { users: ctrl } = require('../../controllers')
+// const { controllerWrapper, authenticate, sizeChanger } = require('../../middelwares')
+// const { users: ctrl } = require('../../controllers')
 
-const router = express.Router()
+// const router = express.Router()
 
-router.get('/verify/:verificationToken', controllerWrapper(ctrl.verify))
-router.post('/verify/', controllerWrapper(ctrl.verifyAgain))
+// router.get('/verify/:verificationToken', controllerWrapper(ctrl.verify))
+// router.post('/verify/', controllerWrapper(ctrl.verifyAgain))
 
-router.patch('/avatars', authenticate, upload.single('avatar'), sizeChanger, controllerWrapper(ctrl.updateAvatar))
+// router.patch('/avatars', authenticate,
+// // upload.single('avatar'),
+// sizeChanger,
+// controllerWrapper(ctrl.updateAvatar))
 
-module.exports = router
+// module.exports = router

@@ -13,9 +13,12 @@ const refreshTokenSchema = new Schema({
   },
   created: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   },
-  revoked: Date,
+  revoked: {
+    type: Date,
+    default: null
+  },
   replacedByToken: String
 });
 

@@ -6,21 +6,22 @@ const { User, RefreshToken } = require('../../schemas')
 const { SECRET_KEY } = process.env
 
 const refreshingToken = async (req, res) => {
-  const { authorization } = req.headers
-  if (!authorization) {
-    throw new Unauthorized('Not authorized')
-  }
-  const [bearer, token] = authorization.split(' ')
-  if (bearer !== 'Bearer') {
-    throw new Unauthorized('Invalid token')
-  }
-  const user = await User.findOne({ authorization })
+  // const { authorization } = req.headers
+  // if (!authorization) {
+  //   throw new Unauthorized('Not authorized')
+  // }
+  // const [bearer, token] = authorization.split(' ')
+  // if (bearer !== 'Bearer') {
+  //   throw new Unauthorized('Invalid token')
+  // }
+  const user = req.user
+  // const user = await User.findOne({ authorization })
   const userRefreshToken = user.refreshToken
 
   const refreshToken = await RefreshToken.findOne({ userRefreshToken })
   console.log(refreshToken)
 
-  if (!refreshToken || (Date.now() >= refreshToken.expires) || refreshToken.revoked) {
+  if (!refreshToken || (Date.now() >= refreshToken.expires) || !refreshToken.revoked) {
     res.status(400).json({
       status: 'Bad Request',
       code: 400,
@@ -39,14 +40,14 @@ const refreshingToken = async (req, res) => {
   })
   refreshToken.replacedByToken = newRefreshTokenConection.token
 
-  await refreshToken.save()
-  await newRefreshTokenConection.save()
-  await User.findByIdAndUpdate(user._id, { token, refreshToken: newRefreshToken, refreshTokenConection: newRefreshTokenConection })
-
   const payload = {
     id: user._id
   }
   const newToken = `Bearer ${jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' })}`
+
+  await refreshToken.save()
+  await newRefreshTokenConection.save()
+  await User.findByIdAndUpdate(user._id, { token: newToken, refreshToken: newRefreshToken, refreshTokenConection: newRefreshTokenConection })
 
   res.json({
     status: 'New pair of tokens created',

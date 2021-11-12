@@ -3,7 +3,9 @@ const { Unauthorized } = require('http-errors')
 
 const current = async(req, res) => {
   const { _id } = req.user
+  console.log(_id)
   const user = await User.findById(_id, 'email name')
+  console.log(user)
   if (!user) {
     throw new Unauthorized('Not authorized')
   }
