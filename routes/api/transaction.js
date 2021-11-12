@@ -8,6 +8,8 @@ const router = express.Router()
 
 router.get('/', authenticate, controllerWrapper(ctrl.listTransactions))
 
+router.get('/categories', controllerWrapper(ctrl.getCategories))
+
 router.get('/:transactionId', authenticate, controllerWrapper(ctrl.getById))
 
 router.post('/', authenticate, validator(joiSchema), controllerWrapper(ctrl.add))
