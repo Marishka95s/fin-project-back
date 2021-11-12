@@ -55,5 +55,5 @@ const Transaction = model('transaction', transactionSchema)
 module.exports = {
   Transaction,
   joiSchema,
-  categories
+  categories,
 }

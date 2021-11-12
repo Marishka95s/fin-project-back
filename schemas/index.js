@@ -5,5 +5,5 @@ const { categories } = require('./transactions')
 module.exports = {
   Transaction,
   User,
-  categories
+  categories,
 }
