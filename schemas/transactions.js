@@ -2,11 +2,6 @@
 const { Schema, model } = require('mongoose')
 const Joi = require('joi')
 
-// const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-// { minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }
-
-// const phoneRegex = /^[+]{1}[0-9]{2}[-]{1}[0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/
-
 const transactionSchema = Schema({
   type: {
     type: String,
@@ -21,12 +16,22 @@ const transactionSchema = Schema({
   sum: {
     type: Number,
     required: true,
+    min: 0
   },
   comment: {
     type: String
   },
+  date: {
+    type: Number,
+  },
+  month: {
+    type: Number,
+  },
+  year: {
+    type: Number,
+  },
   balance: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: 'user',
   },
   owner: {
@@ -37,14 +42,13 @@ const transactionSchema = Schema({
 { versionKey: false, timestamps: true },)
 
 const joiSchema = Joi.object({
-  type: Joi.string().required(),
+  type: Joi.string().valid('expense', 'income').required(),
   category: Joi.string().required(),
-  sum: Joi.number().required(),
+  sum: Joi.number().min(0).required(),
   comment: Joi.string()
 })
 
 const Transaction = model('transaction', transactionSchema)
-
 
 module.exports = {
   Transaction,
