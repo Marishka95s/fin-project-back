@@ -3,7 +3,6 @@ const Joi = require('joi')
 const bcrypt = require('bcryptjs')
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-// { minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }
 
 const userSchema = Schema({
   password: {
@@ -16,26 +15,25 @@ const userSchema = Schema({
     unique: true,
     match: emailRegex
   },
-  subscription: {
+  name: {
     type: String,
-    enum: ['starter', 'pro', 'business'],
-    default: 'starter'
+    required: [true, 'Name is required']
+  },
+  balance: {
+    type: Number,
+    default: 0
   },
   token: {
     type: String,
     default: null,
   },
-  avatarURL: {
+  refreshToken: {
     type: String,
-    required: true,
+    default: null,
   },
-  verify: {
-    type: Boolean,
-    default: false,
-  },
-  verificationToken: {
-    type: String,
-    required: [true, 'Verification token is required'],
+  refreshTokenConection: {
+    type: Schema.Types.ObjectId,
+    ref: 'refreshToken'
   },
 },
 { versionKey: false, timestamps: true },)
@@ -48,11 +46,11 @@ userSchema.methods.comparePassword = function(password) {
 }
 
 const joiSchema = Joi.object({
-  password: Joi.string().min(10).required(),
+  password: Joi.string().min(6).max(12).required(),
   email: Joi.string().email(emailRegex).required(),
-  subscription: Joi.string(),
+  name: Joi.string().min(1).max(12),
   token: Joi.string(),
-  avatarURL: Joi.string()
+  refreshToken: Joi.string()
 })
 
 const User = model('user', userSchema)

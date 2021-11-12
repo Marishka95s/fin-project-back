@@ -1,12 +1,9 @@
 const { Conflict } = require('http-errors')
-const gravatar = require('gravatar')
-const { nanoid } = require('nanoid')
 
 const { User } = require('../../schemas')
-const { sendEmail } = require('../../helpers')
 
 const register = async (req, res) => {
-  if (req.body.email === null || req.body.password === null) {
+  if (req.body.email === null || req.body.password === null || req.body.name === null) {
     res.status(400).json({
       status: 'Bad Request',
       code: 400,
@@ -14,29 +11,17 @@ const register = async (req, res) => {
     })
     return
   }
-  const { email, password } = req.body
+  const { email, password, name } = req.body
   const user = await User.findOne({ email })
 
   if (user) {
     throw new Conflict('Email in use')
   }
-  const avatarURL = gravatar.url(email)
-  const verificationToken = nanoid()
 
-  const newUser = new User({ email, avatarURL, verificationToken })
+  const newUser = new User({ email, name, token: null, refreshToken: null, balance: 0, refreshTokenConection: null })
   newUser.setPassword(password)
 
   const result = await newUser.save()
-
-  const registrationMail = {
-    to: email,
-    subject: 'Registration confirm',
-    html: `<a href = "http://localhost:3000/api/users/verify/${verificationToken}">Click it to confirm a registration</a>`
-  }
-  sendEmail(registrationMail)
-
-  //   const hashPasword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-  //   await User.create({ email, password: hashPasword })
 
   res.status(201).json({
     status: 'success',
