@@ -4,7 +4,7 @@ const { Schema, model } = require('mongoose')
 const refreshTokenSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'user'
   },
   token: String,
   expires: Date,

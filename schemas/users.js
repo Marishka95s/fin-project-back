@@ -39,8 +39,8 @@ userSchema.methods.comparePassword = function(password) {
 
 const joiSchema = Joi.object({
   password: Joi.string().min(6).max(12).required(),
-  email: Joi.string().email(emailRegex).min(1).max(12).required(),
-  name: Joi.string().required(),
+  email: Joi.string().email(emailRegex).required(),
+  name: Joi.string().min(1).max(12),
   token: Joi.string(),
   refreshToken: Joi.string()
 })

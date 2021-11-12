@@ -8,6 +8,7 @@ const { SECRET_KEY } = process.env
 const refreshToken = async (req, res) => {
   const { token } = req.headers
   const refreshToken = await RefreshToken.findOne({ token }).populate('user')
+  console.log(refreshToken)
   if (!refreshToken || !refreshToken.isActive) {
     res.status(400).json({
       status: 'Bad Request',

@@ -32,7 +32,7 @@ const login = async (req, res) => {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   })
   await refreshToken.save()
-  await User.findByIdAndUpdate(user._id, { token, refreshToken })
+  await User.findByIdAndUpdate(user._id, { token, refreshToken: refreshToken.token })
 
   res.json({
     status: 'success',
