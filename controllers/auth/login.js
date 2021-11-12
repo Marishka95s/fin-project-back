@@ -29,7 +29,8 @@ const login = async (req, res) => {
   const refreshToken = `Bearer ${crypto.randomBytes(40).toString('hex')}`
   const refreshTokenConection = new RefreshToken({
     user: user._id,
-    token: refreshToken,
+    token: token,
+    refreshToken: refreshToken,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7d try
   })
   await refreshTokenConection.save()

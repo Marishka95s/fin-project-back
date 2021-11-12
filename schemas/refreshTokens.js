@@ -6,6 +6,10 @@ const refreshTokenSchema = new Schema({
     type: String,
     default: null
   },
+  refreshToken: {
+    type: String,
+    default: null
+  },
   expires: Date,
   user: {
     type: Schema.Types.ObjectId,
@@ -22,9 +26,9 @@ const refreshTokenSchema = new Schema({
   replacedByToken: String
 });
 
-refreshTokenSchema.virtual('isExpired').get(function () {
-  return Date.now() >= this.expires;
-});
+// refreshTokenSchema.virtual('isExpired').get(function () {
+//   return Date.now() >= this.expires;
+// });
 
 const RefreshToken = model('refreshToken', refreshTokenSchema)
 
