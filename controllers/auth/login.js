@@ -25,21 +25,23 @@ const login = async (req, res) => {
     id: user._id
   }
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' })
-  const refreshToken = new RefreshToken({
+  const token = `Bearer ${jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' })}`
+  const refreshToken = `Bearer ${crypto.randomBytes(40).toString('hex')}`
+  const refreshTokenConection = new RefreshToken({
     user: user._id,
-    token: crypto.randomBytes(40).toString('hex'),
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    token: refreshToken,
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7d try
   })
-  await refreshToken.save()
-  await User.findByIdAndUpdate(user._id, { token, refreshToken: refreshToken.token })
+  await refreshTokenConection.save()
+  await User.findByIdAndUpdate(user._id, { token, refreshToken, refreshTokenConection })
+  const updatedUser = await User.findOne({ email })
 
   res.json({
     status: 'success',
     code: 200,
     token,
-    refreshToken: refreshToken.token,
-    user
+    refreshToken,
+    user: updatedUser
   })
 }
 

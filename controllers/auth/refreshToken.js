@@ -1,15 +1,26 @@
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 
-const { RefreshToken } = require('../../schemas')
+const { User, RefreshToken } = require('../../schemas')
 
 const { SECRET_KEY } = process.env
 
-const refreshToken = async (req, res) => {
-  const { token } = req.headers
-  const refreshToken = await RefreshToken.findOne({ token }).populate('user')
+const refreshingToken = async (req, res) => {
+  const { authorization } = req.headers
+  if (!authorization) {
+    throw new Unauthorized('Not authorized')
+  }
+  const [bearer, token] = authorization.split(' ')
+  if (bearer !== 'Bearer') {
+    throw new Unauthorized('Invalid token')
+  }
+  const user = await User.findOne({ authorization })
+  const userRefreshToken = user.refreshToken
+
+  const refreshToken = await RefreshToken.findOne({ userRefreshToken })
   console.log(refreshToken)
-  if (!refreshToken || !refreshToken.isActive) {
+
+  if (!refreshToken || (Date.now() >= refreshToken.expires) || refreshToken.revoked) {
     res.status(400).json({
       status: 'Bad Request',
       code: 400,
@@ -17,27 +28,33 @@ const refreshToken = async (req, res) => {
     })
     return
   }
-  const { user } = refreshToken
 
-  const newRefreshToken = new RefreshToken({
+  const newRefreshToken = `Bearer ${crypto.randomBytes(40).toString('hex')}`
+
+  refreshToken.revoked = Date.now()
+  const newRefreshTokenConection = new RefreshToken({
     user: user._id,
-    token: crypto.randomBytes(40).toString('hex'),
+    token: newRefreshToken,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   })
-  refreshToken.revoked = Date.now()
-  refreshToken.replacedByToken = newRefreshToken.token
-  await refreshToken.save()
-  await newRefreshToken.save()
+  refreshToken.replacedByToken = newRefreshTokenConection.token
 
-  const newToken = jwt.sign(user, SECRET_KEY, { expiresIn: '15m' })
+  await refreshToken.save()
+  await newRefreshTokenConection.save()
+  await User.findByIdAndUpdate(user._id, { token, refreshToken: newRefreshToken, refreshTokenConection: newRefreshTokenConection })
+
+  const payload = {
+    id: user._id
+  }
+  const newToken = `Bearer ${jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' })}`
 
   res.json({
-    status: 'success',
+    status: 'New pair of tokens created',
     code: 200,
     token: newToken,
-    refreshToken: newRefreshToken.token,
+    refreshToken: newRefreshToken,
     user
   })
 }
 
-module.exports = refreshToken
+module.exports = refreshingToken

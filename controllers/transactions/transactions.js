@@ -1,4 +1,5 @@
 const { Transaction } = require('../../schemas')
+const { User } = require('../../schemas')
 
 const listTransactions = async (req, res, next) => {
   const { page = 1, limit = 5, favorite = true } = req.query
@@ -32,18 +33,41 @@ const getById = async (req, res, next) => {
       transaction
     })
 }
-
+// req.body: {
+//       "type": "income",
+//       "category": "Регулярный доход",
+//       "comment": "Бонус за январь",
+//       "sum": 300,
+//  }
 const add = async (req, res, next) => {
   const { user } = req
-  const newTransaction = { ...req.body, owner: user._id }
-  const result = await Transaction.create(newTransaction)
-  res.status(201).json({
-    status: 'successfully created',
-    code: 201,
-    data: {
-      result
-    }
-  })
+  const date = new Date()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+  let balance = Number(user.get('balance'))
+  req.body.type === 'income' ? balance += req.body.sum : balance -= req.body.sum
+  const newTransaction = {
+    ...req.body,
+    date,
+    month,
+    year,
+    owner: user._id,
+    balance
+  }
+
+  try {
+    await User.findByIdAndUpdate(user._id, { balance: balance }, { new: true })
+    const result = await Transaction.create(newTransaction)
+    res.status(201).json({
+      status: 'successfully created',
+      code: 201,
+      data: {
+        result
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
 }
 
 const updateById = async (req, res, next) => {

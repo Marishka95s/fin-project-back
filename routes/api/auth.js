@@ -22,6 +22,6 @@ router.get('/logout', authenticate, controllerWrapper(ctrl.logout))
 router.get('/current', authenticate, controllerWrapper(ctrl.current))
 
 // 13. Эндпоинт получения новой пары токенов
-router.post('/refresh-token', authenticate, controllerWrapper(ctrl.refreshToken))
+router.post('/refresh-token', authenticate, controllerWrapper(ctrl.refreshingToken))
 
 module.exports = router

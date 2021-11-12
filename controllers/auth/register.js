@@ -18,7 +18,7 @@ const register = async (req, res) => {
     throw new Conflict('Email in use')
   }
 
-  const newUser = new User({ email, name })
+  const newUser = new User({ email, name, token: null, refreshToken: null, balance: 0, refreshTokenConection: null })
   newUser.setPassword(password)
 
   const result = await newUser.save()

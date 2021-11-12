@@ -19,6 +19,10 @@ const userSchema = Schema({
     type: String,
     required: [true, 'Name is required']
   },
+  balance: {
+    type: Number,
+    default: 0
+  },
   token: {
     type: String,
     default: null,
@@ -26,6 +30,10 @@ const userSchema = Schema({
   refreshToken: {
     type: String,
     default: null,
+  },
+  refreshTokenConection: {
+    type: Schema.Types.ObjectId,
+    ref: 'refreshToken'
   },
 },
 { versionKey: false, timestamps: true },)
