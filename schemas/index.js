@@ -8,6 +8,6 @@ const { categories } = require('./transactions')
 module.exports = {
   Transaction,
   User,
-  RefreshToken
+  RefreshToken,
   categories,
 }
