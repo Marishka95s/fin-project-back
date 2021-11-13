@@ -35,28 +35,24 @@ const getById = async (req, res, next) => {
       transaction
     })
 }
-// req.body: {
-//       "type": "income",
-//       "category": "Регулярный доход",
-//       "comment": "Бонус за январь",
-//       "sum": 300,
-//  }
+
 const add = async (req, res, next) => {
   const { user } = req
-  const date = new Date()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
   let balance = Number(user.get('balance'))
   req.body.type === 'income' ? balance += req.body.sum : balance -= req.body.sum
+  if (balance < 0) {
+    res.status(400).json({
+      status: 'Bad Request',
+      code: 400,
+      message: 'Ошибка недостаточно средств на счету'
+    })
+    return
+  }
   const newTransaction = {
     ...req.body,
-    date,
-    month,
-    year,
     owner: user._id,
     balance
   }
-
   try {
     await User.findByIdAndUpdate(user._id, { balance: balance }, { new: true })
     const result = await Transaction.create(newTransaction)
