@@ -53,7 +53,7 @@ const transactionSchema = Schema({
 
 const joiSchema = Joi.object({
   type: Joi.string().valid('expense', 'income').required(),
-  category: Joi.string().required(),
+  category: Joi.string().valid(categories).required(),
   sum: Joi.number().min(0).required(),
   comment: Joi.string()
 })
