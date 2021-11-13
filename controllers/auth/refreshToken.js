@@ -17,7 +17,7 @@ const refreshingToken = async (req, res) => {
   const user = await User.findOne({ authorization })
   const userRefreshToken = user.refreshToken
 
-  const refreshToken = await RefreshToken.findOne({ userRefreshToken })
+  const refreshToken = await RefreshToken.findOne({ userRefreshToken, revoked: null })
   console.log(refreshToken)
 
   if (!refreshToken || (Date.now() >= refreshToken.expires) || refreshToken.revoked) {

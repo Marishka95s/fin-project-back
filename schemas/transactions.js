@@ -12,9 +12,8 @@ const transactionSchema = Schema({
   },
   category: {
     type: String,
-    required: true,
+    required: [true, 'Set category for transaction'],
     enum: categories,
-    // если х  ограниченое количество  то зделась  enum.
   },
   sum: {
     type: Number,
@@ -22,16 +21,24 @@ const transactionSchema = Schema({
     min: 0
   },
   comment: {
-    type: String
+    type: String,
+    default: '',
   },
   date: {
-    type: Number,
+    type: String,
+    default: (new Date()).toLocaleString('ru', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    })
   },
   month: {
     type: Number,
+    default: (new Date()).getMonth() + 1
   },
   year: {
     type: Number,
+    default: (new Date()).getFullYear()
   },
   balance: {
     type: Schema.Types.String,
@@ -46,7 +53,7 @@ const transactionSchema = Schema({
 
 const joiSchema = Joi.object({
   type: Joi.string().valid('expense', 'income').required(),
-  category: Joi.string().required(),
+  category: Joi.string().valid('Основной', 'Еда', 'Авто', 'Развитие', 'Дети', 'Дом', 'Образование', 'Остальные').required(),
   sum: Joi.number().min(0).required(),
   comment: Joi.string()
 })
