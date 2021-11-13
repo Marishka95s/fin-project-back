@@ -8,6 +8,8 @@ const router = express.Router()
 
 router.get('/', authenticate, controllerWrapper(ctrl.listTransactions))
 
+router.get('/statistics', authenticate, controllerWrapper(ctrl.getStatistics))
+
 router.get('/categories', controllerWrapper(ctrl.getCategories))
 
 router.get('/:transactionId', authenticate, controllerWrapper(ctrl.getById))

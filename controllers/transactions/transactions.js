@@ -71,6 +71,66 @@ const add = async (req, res, next) => {
   }
 }
 
+const getStatistics = async (req, res, next) => {
+  const { month = new Date().getMonth() + 1, year = new Date().getFullYear() } = req.body
+  const { _id } = req.user
+  const transactions = await Transaction.find({ owner: _id, month, year }, 'type category sum balance')
+  if (!transactions) {
+    res.status(404).json({
+      status: 'error',
+      code: 404,
+      message: 'Транзакций за указаный период ненайдено'
+    })
+    return
+  }
+  const data = transactions.reduce((result, number) => {
+    if (number.type === 'income') { result.income += number.sum }
+    if (number.type === 'expense') {
+      result.expenseAll += number.sum
+      switch (number.category) {
+        case 'Основной': result.expenseCategory.Basic += number.sum
+          break;
+        case 'Еда': result.expenseCategory.Food += number.sum
+          break;
+        case 'Авто': result.expenseCategory.Auto += number.sum
+          break;
+        case 'Развитие': result.expenseCategory.Development += number.sum
+          break;
+        case 'Дети': result.expenseCategory.Children += number.sum
+          break;
+        case 'Дом': result.expenseCategory.Home += number.sum
+          break;
+        case 'Образование': result.expenseCategory.Education += number.sum
+          break;
+        case 'Остальные': result.expenseCategory.Others += number.sum
+          break;
+        default:
+          break
+      }
+      return result
+    }
+  }, {
+    income: 0,
+    expenseAll: 0,
+    expenseCategory: {
+      Basic: 0,
+      Food: 0,
+      Auto: 0,
+      Development: 0,
+      Children: 0,
+      Home: 0,
+      Education: 0,
+      Others: 0,
+    }
+  })
+  res.json(
+    {
+      status: 'success',
+      code: 200,
+      data
+    })
+}
+
 const updateById = async (req, res, next) => {
   const { transactionId } = req.params
   const result = await Transaction.findByIdAndUpdate(transactionId, req.body)
@@ -142,5 +202,6 @@ module.exports = {
   updateById,
   removeById,
   updateTransactionStatusById,
-  getCategories
+  getCategories,
+  getStatistics
 }
