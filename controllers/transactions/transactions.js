@@ -49,7 +49,10 @@ const add = async (req, res, next) => {
     return
   }
   const newTransaction = {
-    ...req.body,
+    type: req.body.type,
+    category: req.body.category,
+    sum: req.body.sum,
+    comment: req.body.comment,
     owner: user._id,
     balance
   }
