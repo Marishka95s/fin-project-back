@@ -192,7 +192,11 @@ const updateTransactionStatusById = async (req, res) => {
   })
 }
 const getCategories = async (req, res) => {
-  res.json({ data: categories })
+  res.json({
+    status: 'success',
+    code: 200,
+    data: categories
+  })
 }
 
 module.exports = {
