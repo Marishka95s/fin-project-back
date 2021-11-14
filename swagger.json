@@ -31,7 +31,7 @@
         },
         {
             "name": "Transaction",
-            "description": "Transaction endpoints"
+            "description": "Transactions endpoints"
         }
     ],
     "paths": {
@@ -40,7 +40,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "User registration",
+                "summary": "Get user credentials and return created user accaunt",
                 "parameters": [
                     {
                         "in": "path",
@@ -97,7 +97,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "User authentication",
+                "summary": "Get authenticate user credentials and return user acaunt details with a JWT token and a refresh token",
                 "parameters": [
                     {
                         "in": "path",
@@ -181,12 +181,38 @@
                 }
             }
         },
-        "/auth/refresh-token": {
+        "/auth/current": {
             "get": {
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Get new pair of token: token and refreshToken",
+                "summary": "Get current user info",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Current user in system",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrentUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh-token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Use a refresh token to generate a new JWT token and a new refresh token",
                 "parameters": [],
                 "security": [
                     {
@@ -226,6 +252,233 @@
                     "404": {
                         "description": "Invalid user / Invalid session",
                         "content": {}
+                    }
+                }
+            }
+        },
+        "/transactions/add": {
+            "post": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Get transactions current user",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Transaction's object added",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddTransactionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AddTransactionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/listTransactions": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ]
+            },
+            "summary": "Get transactions current user",
+            "parameters": [],
+            "requestBody": {
+                "description": "Registration's object",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ListTransactionRequest"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "That's all transactions",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListTransactionResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/statistics": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Statistics about all transaction",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Statistics all transactions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatisticsTransactionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/categories": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Transactions categories",
+                "responses": {
+                    "200": {
+                        "description": "Transaction's categories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CategoriesTransactionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/:transactionId/getById": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Get transaction by transactionId",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetByIdTransactionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/:transactionId/removeById": {
+            "delete": {
+                "tags": [
+                    "Transaction"
+                ]
+            },
+            "summary": "Get transactions current user",
+            "parameters": [],
+            "requestBody": {
+                "description": "Registration's object",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/RemoveTransactionRequest"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "That's all transactions",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RemoveTransactionResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/:transactionId/updateById": {
+            "put": {
+                "tags": [
+                    "Transaction"
+                ]
+            },
+            "summary": "Update transaction by transactionId",
+            "parameters": [],
+            "requestBody": {
+                "description": "Registration's object",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateByIdTransactionRequest"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "That's all transactions",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateByIdTransactionResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/:transactionId/favorite": {
+            "patch": {
+                "tags": [
+                    "Transaction"
+                ]
+            },
+            "summary": "Get transactions current user",
+            "parameters": [],
+            "requestBody": {
+                "description": "Registration's object",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/FavoriteTransactionRequest"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "That's all transactions",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FavoriteTransactionResponse"
+                            }
+                        }
                     }
                 }
             }
@@ -397,6 +650,46 @@
                     }
                 }
             },
+            "CurrentUserResponse":  {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Status token",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "Status code",
+                        "example": "200"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "User's id",
+                                "example": "618f8f43a4c9adfc00d3a5a3"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "User's email",
+                                "format": "email"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "User's name",
+                                "example": "Nicole"
+                            },
+                            "balance": {
+                                "type": "integer",
+                                "description": "User's balance",
+                                "example": "2194"
+                            }
+                        }
+                    }
+                }
+            },
             "RefreshTokenRequest": {
                 "type": "object",
                 "properties": {
@@ -426,14 +719,309 @@
                         "example": "618f976ac652013c409d20d4"
                     }
                 }
+            },
+            "AddTransactionRequest": {
+                "required": [
+                    "type",
+                    "category",
+                    "sum",
+                    "comment"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Transaction's expense or income",
+                        "example": "expense"
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Transaction's categories",
+                        "example": "Основной"
+                    },
+                    "sum": {
+                        "type": "integer",
+                        "description": "Transaction's sum for expense or income",
+                        "example": "6"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "description": "Comment for add new transaction",
+                        "example": "Surprise wive"
+                    }
+                }
+            },
+            "AddTransactionResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Status added transaction",
+                        "example": "successfully created"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "Status code",
+                        "example": "201"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "result": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "description": "Transaction's type",
+                                        "example": "expense"
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "description": "Transaction's categories",
+                                        "example": "Основной"
+                                    },
+                                    "sum": {
+                                        "type": "integer",
+                                        "description": "Transaction's sum for expense or income",
+                                        "example": "6"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "description": "Comment for add new transaction",
+                                        "example": "Surprise wive"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "description": "Transaction's date",
+                                        "example": "14.11.21"
+                                    },
+                                    "month": {
+                                        "type": "integer",
+                                        "description": "Transaction's month",
+                                        "example": "11"
+                                    },
+                                    "year": {
+                                        "type": "integer",
+                                        "description": "Transaction's yaer",
+                                        "example": "2021"
+                                    },
+                                    "balance": {
+                                        "type": "integer",
+                                        "description": "Main balanse after transaction",
+                                        "example": "3994"
+                                    },
+                                    "owner": {
+                                        "type": "string",
+                                        "description": "Transaction's owner(userId)",
+                                        "example": "2021"
+                                    },
+                                    "_id": {
+                                        "type": "string",
+                                        "description": "Transaction's id",
+                                        "example": "61911b8b75ac23b9efa47ffd"
+                                    },
+                                    "createdAt": {
+                                        "type": "string",
+                                        "description": "Time create transaction",
+                                        "example": "2021-11-14T14:22:03.596Z"
+                                    },
+                                    "updatedAt": {
+                                        "type": "string",
+                                        "description": "Time update transaction",
+                                        "example": "2021-11-14T14:22:03.596Z"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CategoriesTransactionResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "description": "Main categories your transactions",
+                        "example": [
+                            "Основной",
+                            "Еда",
+                            "Авто",
+                            "Развитие",
+                            "Дети",
+                            "Дом",
+                            "Образование",
+                            "Остальные"
+                        ]
+                    }
+                }
+            },
+            "StatisticsTransactionResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Status for getting statistics transactions",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "Status code",
+                        "example": "200"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "income": {
+                                "type": "integer",
+                                "description": "Transaction's income",
+                                "example": "0"
+                            },
+                            "expenseAll": {
+                                "type": "integer",
+                                "description": "All expense",
+                                "example": "1806"
+                            },
+                            "expenseCategory": {
+                                "type": "object",
+                                "properties": {
+                                    "Basic": {
+                                        "type": "integer",
+                                        "description": "Expense's basic",
+                                        "example": "6"
+                                    },
+                                    "Food": {
+                                        "type": "integer",
+                                        "description": "Expense's food",
+                                        "example": "0"
+                                    },
+                                    "Auto": {
+                                        "type": "integer",
+                                        "description": "Expense's auto",
+                                        "example": "1000"
+                                    },
+                                    "Development": {
+                                        "type": "integer",
+                                        "description": "Expense's development",
+                                        "example": "0"
+                                    },
+                                    "Children": {
+                                        "type": "integer",
+                                        "description": "Expense's children",
+                                        "example": "0"
+                                    },
+                                    "Home": {
+                                        "type": "integer",
+                                        "description": "Expense's home",
+                                        "example": "350"
+                                    },
+                                    "Education": {
+                                        "type": "integer",
+                                        "description": "Expense's education",
+                                        "example": "450"
+                                    },
+                                    "Others": {
+                                        "type": "integer",
+                                        "description": "Expense's others",
+                                        "example": "0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "GetByIdTransactionResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Status added transaction",
+                        "example": "successfully created"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "Status code",
+                        "example": "201"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "result": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "description": "Transaction's type",
+                                        "example": "expense"
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "description": "Transaction's categories",
+                                        "example": "Основной"
+                                    },
+                                    "sum": {
+                                        "type": "integer",
+                                        "description": "Transaction's sum for expense or income",
+                                        "example": "6"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "description": "Comment for add new transaction",
+                                        "example": "Surprise wive"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "description": "Transaction's date",
+                                        "example": "14.11.21"
+                                    },
+                                    "month": {
+                                        "type": "integer",
+                                        "description": "Transaction's month",
+                                        "example": "11"
+                                    },
+                                    "year": {
+                                        "type": "integer",
+                                        "description": "Transaction's yaer",
+                                        "example": "2021"
+                                    },
+                                    "balance": {
+                                        "type": "integer",
+                                        "description": "Main balanse after transaction",
+                                        "example": "3994"
+                                    },
+                                    "owner": {
+                                        "type": "string",
+                                        "description": "Transaction's owner(userId)",
+                                        "example": "2021"
+                                    },
+                                    "_id": {
+                                        "type": "string",
+                                        "description": "Transaction's id",
+                                        "example": "61911b8b75ac23b9efa47ffd"
+                                    },
+                                    "createdAt": {
+                                        "type": "string",
+                                        "description": "Time create transaction",
+                                        "example": "2021-11-14T14:22:03.596Z"
+                                    },
+                                    "updatedAt": {
+                                        "type": "string",
+                                        "description": "Time update transaction",
+                                        "example": "2021-11-14T14:22:03.596Z"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        },
-        "securitySchemes": {
-            "Bearer": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            }
+        }
+    },
+    "securitySchemes": {
+        "Bearer": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
         }
     }
 }
