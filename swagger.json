@@ -1,439 +1,439 @@
-{
-    "openapi": "3.0.1",
-    "info": {
-        "version": "2.0.2",
-        "title": "Swagger test",
-        "description": "Showing off swagger-ui-express",
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        }
-    },
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ],
-    "servers": [
-        {
-            "url": "http://localhost:3030"
-        }
-    ],
-    "tags": [
-        {
-            "name": "Auth",
-            "description": "Authorization endpoints"
-        },
-        {
-            "name": "Users",
-            "description": "Users endpoints"
-        },
-        {
-            "name": "Transaction",
-            "description": "Transaction endpoints"
-        }
-    ],
-    "paths": {
-        "/auth/register": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "User registration",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "signup",
-                        "required": "true",
-                        "type": "string",
-                        "description": "User's email, password and name"
-                    }
-                ],
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "requestBody": {
-                    "description": "Registration's object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RegistrationRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Registred success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RegistrationResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Ошибка от Joi или другой библиотеки валидации",
-                        "content": {}
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "content": {}
-                    },
-                    "500": {
-                        "description": "Server error",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/auth/login": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "User authentication",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "email",
-                        "required": "true",
-                        "type": "string",
-                        "description": "User's email"
-                    },
-                    {
-                        "in": "path",
-                        "name": "password",
-                        "required": "true",
-                        "type": "string",
-                        "description": "User's password"
-                    }
-                ],
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "requestBody": {
-                    "description": "Registration's object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/LoginRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Login in system",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/LoginResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Ошибка от Joi или другой библиотеки валидации",
-                        "content": {}
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "content": {}
-                    },
-                    "500": {
-                        "description": "Server error",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/auth/logout": {
-            "get": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Logout",
-                "responses": {
-                    "204": {
-                        "description": "Logout in system success"
-                    },
-                    "400": {
-                        "description": "No token provided",
-                        "content": {}
-                    },
-                    "401": {
-                        "description": "Unauthorized (invalid access token)",
-                        "content": {}
-                    },
-                    "404": {
-                        "description": "Invalid user / Invalid session",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/auth/refresh-token": {
-            "get": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Get new pair of token: token and refreshToken",
-                "parameters": [],
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "requestBody": {
-                    "description": "RefreshToken object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RefreshTokenRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "New pair of tokens created",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RefreshTokenResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Token",
-                        "content": {}
-                    },
-                    "401": {
-                        "description": "Unauthorized (invalid refresh token)",
-                        "content": {}
-                    },
-                    "404": {
-                        "description": "Invalid user / Invalid session",
-                        "content": {}
-                    }
-                }
-            }
-        }
-    },
-    "components": {
-        "schemas": {
-            "RegistrationRequest": {
-                "type": "object",
-                "required": [
-                    "email",
-                    "password",
-                    "name"
-                ],
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "description": "User's email",
-                        "format": "email"
-                    },
-                    "password": {
-                        "type": "string",
-                        "description": "User's password",
-                        "example": "qwerty123"
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "User's name",
-                        "example": "Nicole"
-                    }
-                }
-            },
-            "RegistrationResponse": {
-                "type": "object",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "email": {
-                            "type": "string",
-                            "description": "User's email",
-                            "format": "email"
-                        },
-                        "name": {
-                            "type": "string",
-                            "description": "User's name",
-                            "example": "Adam"
-                        },
-                        "id": {
-                            "type": "string",
-                            "description": "User's id",
-                            "example": "618f8f43a4c9adfc00d3a5a3"
-                        }
-                    }
-                },
-                "example": {
-                    "status": "success",
-                    "code": 201,
-                    "message": "Registred success",
-                    "result": {
-                        "email": "wallet@mail.ru",
-                        "name": "Nicole",
-                        "balance": 0,
-                        "token": null,
-                        "refreshToken": null,
-                        "refreshTokenConection": null,
-                        "_id": "618f8f43a4c9adfc00d3a5a3",
-                        "password": "$2a$10$ctY7EDZMpSy3VfGDJj06f.m8Qz7WvJgE50VoGZUdxPhbYmvF1XdGy",
-                        "createdAt": "2021-11-13T10:11:16.118Z",
-                        "updatedAt": "2021-11-13T10:11:16.118Z"
-                    }
-                }
-            },
-            "LoginRequest": {
-                "required": [
-                    "email",
-                    "password"
-                ],
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "description": "User's email",
-                        "format": "email"
-                    },
-                    "password": {
-                        "type": "string",
-                        "description": "User's password",
-                        "example": "qwerty123"
-                    }
-                }
-            },
-            "LoginResponse": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "description": "Status token",
-                        "example": "success"
-                    },
-                    "code": {
-                        "type": "integer",
-                        "description": "Status code",
-                        "example": "200"
-                    },
-                    "token": {
-                        "type": "string",
-                        "description": "Session's access token (needed for all requests)",
-                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOGY4ZjQzYTRjOWFkZmMwMGQzYTVhMyIsImlhdCI6MTYzNjgwMDM2MiwiZXhwIjoxNjM2ODAxMjYyfQ.LdIGRZPx6uVbwmhCm9-7BBxVdX9m4sMBfTMH71i-5x8"
-                    },
-                    "refreshToken": {
-                        "type": "string",
-                        "description": "Session's access token (needed for /auth/refreshToken)",
-                        "example": "b1e32581a4d98e815fd24cc63243cc7283f27da65edd6f92958ef98386b551a664f3b7c065f3c3c8"
-                    },
-                    "user": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string",
-                                "description": "User's id",
-                                "example": "618f8f43a4c9adfc00d3a5a3"
-                            },
-                            "email": {
-                                "type": "string",
-                                "description": "User's email",
-                                "format": "email"
-                            },
-                            "name": {
-                                "type": "string",
-                                "description": "User's name",
-                                "example": "Nicole"
-                            },
-                            "balance": {
-                                "type": "integer",
-                                "description": "User's balance",
-                                "example": "0"
-                            },
-                            "token": {
-                                "type": "string",
-                                "description": "Session's access token (needed for all requests)",
-                                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOGY4ZjQzYTRjOWFkZmMwMGQzYTVhMyIsImlhdCI6MTYzNjgwMDM2MiwiZXhwIjoxNjM2ODAxMjYyfQ.LdIGRZPx6uVbwmhCm9-7BBxVdX9m4sMBfTMH71i-5x8"
-                            },
-                            "refreshToken": {
-                                "type": "string",
-                                "description": "Session's access token (needed for /auth/refreshToken)",
-                                "example": "b1e32581a4d98e815fd24cc63243cc7283f27da65edd6f92958ef98386b551a664f3b7c065f3c3c8"
-                            },
-                            "refreshTokenConection": {
-                                "type": "string",
-                                "description": "Session's access new refresh token",
-                                "example": "618f976ac652013c409d20d4"
-                            },
-                            "password": {
-                                "type": "string",
-                                "description": "User's password",
-                                "example": "$2a$10$ctY7EDZMpSy3VfGDJj06f.m8Qz7WvJgE50VoGZUdxPhbYmvF1XdGy"
-                            },
-                            "createdAt": {
-                                "type": "string",
-                                "description": "Time create login",
-                                "example": "2021-11-13T10:11:16.118Z"
-                            },
-                            "updatedAt": {
-                                "type": "string",
-                                "description": "Time update login",
-                                "example": "2021-11-13T10:46:02.612Z"
-                            }
-                        }
-                    }
-                }
-            },
-            "RefreshTokenRequest": {
-                "type": "object",
-                "properties": {
-                    "refreshTokenConection": {
-                        "type": "string",
-                        "description": "Session's ('refreshTokenConection' field after authentication)",
-                        "example": "618f976ac652013c409d20d4"
-                    }
-                }
-            },
-            "RefreshTokenResponse": {
-                "type": "object",
-                "properties": {
-                    "token": {
-                        "type": "string",
-                        "description": "Access token",
-                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOGY4ZjQzYTRjOWFkZmMwMGQzYTVhMyIsImlhdCI6MTYzNjgwMDM2MiwiZXhwIjoxNjM2ODAxMjYyfQ.LdIGRZPx6uVbwmhCm9-7BBxVdX9m4sMBfTMH71i-5x8"
-                    },
-                    "refreshToken": {
-                        "type": "string",
-                        "description": "Refresh token",
-                        "example": "b1e32581a4d98e815fd24cc63243cc7283f27da65edd6f92958ef98386b551a664f3b7c065f3c3c8"
-                    },
-                    "refreshTokenConection": {
-                        "type": "string",
-                        "description": "New session's id",
-                        "example": "618f976ac652013c409d20d4"
-                    }
-                }
-            }
-        },
-        "securitySchemes": {
-            "Bearer": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            }
-        }
-    }
-}
+// {
+//     "openapi": "3.0.1",
+//     "info": {
+//         "version": "2.0.2",
+//         "title": "Swagger test",
+//         "description": "Showing off swagger-ui-express",
+//         "license": {
+//             "name": "MIT",
+//             "url": "https://opensource.org/licenses/MIT"
+//         }
+//     },
+//     "consumes": [
+//         "application/json"
+//     ],
+//     "produces": [
+//         "application/json"
+//     ],
+//     "servers": [
+//         {
+//             "url": "http://localhost:3030"
+//         }
+//     ],
+//     "tags": [
+//         {
+//             "name": "Auth",
+//             "description": "Authorization endpoints"
+//         },
+//         {
+//             "name": "Users",
+//             "description": "Users endpoints"
+//         },
+//         {
+//             "name": "Transaction",
+//             "description": "Transaction endpoints"
+//         }
+//     ],
+//     "paths": {
+//         "/auth/register": {
+//             "post": {
+//                 "tags": [
+//                     "Auth"
+//                 ],
+//                 "summary": "User registration",
+//                 "parameters": [
+//                     {
+//                         "in": "path",
+//                         "name": "signup",
+//                         "required": "true",
+//                         "type": "string",
+//                         "description": "User's email, password and name"
+//                     }
+//                 ],
+//                 "security": [
+//                     {
+//                         "Bearer": []
+//                     }
+//                 ],
+//                 "requestBody": {
+//                     "description": "Registration's object",
+//                     "required": true,
+//                     "content": {
+//                         "application/json": {
+//                             "schema": {
+//                                 "$ref": "#/components/schemas/RegistrationRequest"
+//                             }
+//                         }
+//                     }
+//                 },
+//                 "responses": {
+//                     "201": {
+//                         "description": "Registred success",
+//                         "content": {
+//                             "application/json": {
+//                                 "schema": {
+//                                     "$ref": "#/components/schemas/RegistrationResponse"
+//                                 }
+//                             }
+//                         }
+//                     },
+//                     "400": {
+//                         "description": "Ошибка от Joi или другой библиотеки валидации",
+//                         "content": {}
+//                     },
+//                     "404": {
+//                         "description": "Not found",
+//                         "content": {}
+//                     },
+//                     "500": {
+//                         "description": "Server error",
+//                         "content": {}
+//                     }
+//                 }
+//             }
+//         },
+//         "/auth/login": {
+//             "post": {
+//                 "tags": [
+//                     "Auth"
+//                 ],
+//                 "summary": "User authentication",
+//                 "parameters": [
+//                     {
+//                         "in": "path",
+//                         "name": "email",
+//                         "required": "true",
+//                         "type": "string",
+//                         "description": "User's email"
+//                     },
+//                     {
+//                         "in": "path",
+//                         "name": "password",
+//                         "required": "true",
+//                         "type": "string",
+//                         "description": "User's password"
+//                     }
+//                 ],
+//                 "security": [
+//                     {
+//                         "Bearer": []
+//                     }
+//                 ],
+//                 "requestBody": {
+//                     "description": "Registration's object",
+//                     "required": true,
+//                     "content": {
+//                         "application/json": {
+//                             "schema": {
+//                                 "$ref": "#/components/schemas/LoginRequest"
+//                             }
+//                         }
+//                     }
+//                 },
+//                 "responses": {
+//                     "200": {
+//                         "description": "Login in system",
+//                         "content": {
+//                             "application/json": {
+//                                 "schema": {
+//                                     "$ref": "#/components/schemas/LoginResponse"
+//                                 }
+//                             }
+//                         }
+//                     },
+//                     "400": {
+//                         "description": "Ошибка от Joi или другой библиотеки валидации",
+//                         "content": {}
+//                     },
+//                     "404": {
+//                         "description": "Not found",
+//                         "content": {}
+//                     },
+//                     "500": {
+//                         "description": "Server error",
+//                         "content": {}
+//                     }
+//                 }
+//             }
+//         },
+//         "/auth/logout": {
+//             "get": {
+//                 "tags": [
+//                     "Auth"
+//                 ],
+//                 "summary": "Logout",
+//                 "responses": {
+//                     "204": {
+//                         "description": "Logout in system success"
+//                     },
+//                     "400": {
+//                         "description": "No token provided",
+//                         "content": {}
+//                     },
+//                     "401": {
+//                         "description": "Unauthorized (invalid access token)",
+//                         "content": {}
+//                     },
+//                     "404": {
+//                         "description": "Invalid user / Invalid session",
+//                         "content": {}
+//                     }
+//                 }
+//             }
+//         },
+//         "/auth/refresh-token": {
+//             "get": {
+//                 "tags": [
+//                     "Auth"
+//                 ],
+//                 "summary": "Get new pair of token: token and refreshToken",
+//                 "parameters": [],
+//                 "security": [
+//                     {
+//                         "Bearer": []
+//                     }
+//                 ],
+//                 "requestBody": {
+//                     "description": "RefreshToken object",
+//                     "required": true,
+//                     "content": {
+//                         "application/json": {
+//                             "schema": {
+//                                 "$ref": "#/components/schemas/RefreshTokenRequest"
+//                             }
+//                         }
+//                     }
+//                 },
+//                 "responses": {
+//                     "200": {
+//                         "description": "New pair of tokens created",
+//                         "content": {
+//                             "application/json": {
+//                                 "schema": {
+//                                     "$ref": "#/components/schemas/RefreshTokenResponse"
+//                                 }
+//                             }
+//                         }
+//                     },
+//                     "400": {
+//                         "description": "Invalid Token",
+//                         "content": {}
+//                     },
+//                     "401": {
+//                         "description": "Unauthorized (invalid refresh token)",
+//                         "content": {}
+//                     },
+//                     "404": {
+//                         "description": "Invalid user / Invalid session",
+//                         "content": {}
+//                     }
+//                 }
+//             }
+//         }
+//     },
+//     "components": {
+//         "schemas": {
+//             "RegistrationRequest": {
+//                 "type": "object",
+//                 "required": [
+//                     "email",
+//                     "password",
+//                     "name"
+//                 ],
+//                 "properties": {
+//                     "email": {
+//                         "type": "string",
+//                         "description": "User's email",
+//                         "format": "email"
+//                     },
+//                     "password": {
+//                         "type": "string",
+//                         "description": "User's password",
+//                         "example": "qwerty123"
+//                     },
+//                     "name": {
+//                         "type": "string",
+//                         "description": "User's name",
+//                         "example": "Nicole"
+//                     }
+//                 }
+//             },
+//             "RegistrationResponse": {
+//                 "type": "object",
+//                 "items": {
+//                     "type": "object",
+//                     "properties": {
+//                         "email": {
+//                             "type": "string",
+//                             "description": "User's email",
+//                             "format": "email"
+//                         },
+//                         "name": {
+//                             "type": "string",
+//                             "description": "User's name",
+//                             "example": "Adam"
+//                         },
+//                         "id": {
+//                             "type": "string",
+//                             "description": "User's id",
+//                             "example": "618f8f43a4c9adfc00d3a5a3"
+//                         }
+//                     }
+//                 },
+//                 "example": {
+//                     "status": "success",
+//                     "code": 201,
+//                     "message": "Registred success",
+//                     "result": {
+//                         "email": "wallet@mail.ru",
+//                         "name": "Nicole",
+//                         "balance": 0,
+//                         "token": null,
+//                         "refreshToken": null,
+//                         "refreshTokenConection": null,
+//                         "_id": "618f8f43a4c9adfc00d3a5a3",
+//                         "password": "$2a$10$ctY7EDZMpSy3VfGDJj06f.m8Qz7WvJgE50VoGZUdxPhbYmvF1XdGy",
+//                         "createdAt": "2021-11-13T10:11:16.118Z",
+//                         "updatedAt": "2021-11-13T10:11:16.118Z"
+//                     }
+//                 }
+//             },
+//             "LoginRequest": {
+//                 "required": [
+//                     "email",
+//                     "password"
+//                 ],
+//                 "type": "object",
+//                 "properties": {
+//                     "email": {
+//                         "type": "string",
+//                         "description": "User's email",
+//                         "format": "email"
+//                     },
+//                     "password": {
+//                         "type": "string",
+//                         "description": "User's password",
+//                         "example": "qwerty123"
+//                     }
+//                 }
+//             },
+//             "LoginResponse": {
+//                 "type": "object",
+//                 "properties": {
+//                     "status": {
+//                         "type": "string",
+//                         "description": "Status token",
+//                         "example": "success"
+//                     },
+//                     "code": {
+//                         "type": "integer",
+//                         "description": "Status code",
+//                         "example": "200"
+//                     },
+//                     "token": {
+//                         "type": "string",
+//                         "description": "Session's access token (needed for all requests)",
+//                         "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOGY4ZjQzYTRjOWFkZmMwMGQzYTVhMyIsImlhdCI6MTYzNjgwMDM2MiwiZXhwIjoxNjM2ODAxMjYyfQ.LdIGRZPx6uVbwmhCm9-7BBxVdX9m4sMBfTMH71i-5x8"
+//                     },
+//                     "refreshToken": {
+//                         "type": "string",
+//                         "description": "Session's access token (needed for /auth/refreshToken)",
+//                         "example": "b1e32581a4d98e815fd24cc63243cc7283f27da65edd6f92958ef98386b551a664f3b7c065f3c3c8"
+//                     },
+//                     "user": {
+//                         "type": "object",
+//                         "properties": {
+//                             "id": {
+//                                 "type": "string",
+//                                 "description": "User's id",
+//                                 "example": "618f8f43a4c9adfc00d3a5a3"
+//                             },
+//                             "email": {
+//                                 "type": "string",
+//                                 "description": "User's email",
+//                                 "format": "email"
+//                             },
+//                             "name": {
+//                                 "type": "string",
+//                                 "description": "User's name",
+//                                 "example": "Nicole"
+//                             },
+//                             "balance": {
+//                                 "type": "integer",
+//                                 "description": "User's balance",
+//                                 "example": "0"
+//                             },
+//                             "token": {
+//                                 "type": "string",
+//                                 "description": "Session's access token (needed for all requests)",
+//                                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOGY4ZjQzYTRjOWFkZmMwMGQzYTVhMyIsImlhdCI6MTYzNjgwMDM2MiwiZXhwIjoxNjM2ODAxMjYyfQ.LdIGRZPx6uVbwmhCm9-7BBxVdX9m4sMBfTMH71i-5x8"
+//                             },
+//                             "refreshToken": {
+//                                 "type": "string",
+//                                 "description": "Session's access token (needed for /auth/refreshToken)",
+//                                 "example": "b1e32581a4d98e815fd24cc63243cc7283f27da65edd6f92958ef98386b551a664f3b7c065f3c3c8"
+//                             },
+//                             "refreshTokenConection": {
+//                                 "type": "string",
+//                                 "description": "Session's access new refresh token",
+//                                 "example": "618f976ac652013c409d20d4"
+//                             },
+//                             "password": {
+//                                 "type": "string",
+//                                 "description": "User's password",
+//                                 "example": "$2a$10$ctY7EDZMpSy3VfGDJj06f.m8Qz7WvJgE50VoGZUdxPhbYmvF1XdGy"
+//                             },
+//                             "createdAt": {
+//                                 "type": "string",
+//                                 "description": "Time create login",
+//                                 "example": "2021-11-13T10:11:16.118Z"
+//                             },
+//                             "updatedAt": {
+//                                 "type": "string",
+//                                 "description": "Time update login",
+//                                 "example": "2021-11-13T10:46:02.612Z"
+//                             }
+//                         }
+//                     }
+//                 }
+//             },
+//             "RefreshTokenRequest": {
+//                 "type": "object",
+//                 "properties": {
+//                     "refreshTokenConection": {
+//                         "type": "string",
+//                         "description": "Session's ('refreshTokenConection' field after authentication)",
+//                         "example": "618f976ac652013c409d20d4"
+//                     }
+//                 }
+//             },
+//             "RefreshTokenResponse": {
+//                 "type": "object",
+//                 "properties": {
+//                     "token": {
+//                         "type": "string",
+//                         "description": "Access token",
+//                         "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOGY4ZjQzYTRjOWFkZmMwMGQzYTVhMyIsImlhdCI6MTYzNjgwMDM2MiwiZXhwIjoxNjM2ODAxMjYyfQ.LdIGRZPx6uVbwmhCm9-7BBxVdX9m4sMBfTMH71i-5x8"
+//                     },
+//                     "refreshToken": {
+//                         "type": "string",
+//                         "description": "Refresh token",
+//                         "example": "b1e32581a4d98e815fd24cc63243cc7283f27da65edd6f92958ef98386b551a664f3b7c065f3c3c8"
+//                     },
+//                     "refreshTokenConection": {
+//                         "type": "string",
+//                         "description": "New session's id",
+//                         "example": "618f976ac652013c409d20d4"
+//                     }
+//                 }
+//             }
+//         },
+//         "securitySchemes": {
+//             "Bearer": {
+//                 "type": "http",
+//                 "scheme": "bearer",
+//                 "bearerFormat": "JWT"
+//             }
+//         }
+//     }
+// }
