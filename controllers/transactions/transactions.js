@@ -17,25 +17,6 @@ const listTransactions = async (req, res, next) => {
   })
 }
 
-const getById = async (req, res, next) => {
-  const { transactionId } = req.params
-  const transaction = await Transaction.findById(transactionId)
-  if (!transaction) {
-    res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: `Contact with id ${transactionId} not found`
-    })
-    return
-  }
-  res.json(
-    {
-      status: 'success',
-      code: 200,
-      transaction
-    })
-}
-
 const add = async (req, res, next) => {
   const { user } = req
   let balance = Number(user.get('balance'))
@@ -141,7 +122,6 @@ const getCategories = async (req, res) => {
 
 module.exports = {
   listTransactions,
-  getById,
   add,
   getCategories,
   getStatistics

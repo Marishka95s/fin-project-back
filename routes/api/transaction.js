@@ -12,8 +12,6 @@ router.get('/statistics', authenticate, controllerWrapper(ctrl.getStatistics))
 
 router.get('/categories', controllerWrapper(ctrl.getCategories))
 
-router.get('/:transactionId', authenticate, controllerWrapper(ctrl.getById))
-
 router.post('/', authenticate, validator(joiSchema), controllerWrapper(ctrl.add))
 
 module.exports = router
