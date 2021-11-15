@@ -132,7 +132,11 @@ const getStatistics = async (req, res, next) => {
 }
 
 const getCategories = async (req, res) => {
-  res.json({ data: categories })
+  res.json({
+    status: 'success',
+    code: 200,
+    data: categories
+  })
 }
 
 module.exports = {
