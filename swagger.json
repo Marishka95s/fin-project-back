@@ -262,7 +262,35 @@
                     "Transaction"
                 ],
                 "summary": "Get transactions current user",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "type",
+                        "required": "true",
+                        "type": "string",
+                        "description": "Transaction's type (expense or income)"
+                    },
+                    {
+                        "in": "path",
+                        "name": "category",
+                        "required": "true",
+                        "type": "string",
+                        "description": "Transaction's category(Основной,Еда,Авто,Развитие,Дети,Дом,Образование,Остальные)"
+                    },{
+                        "in": "path",
+                        "name": "sum",
+                        "required": "true",
+                        "type": "integer",
+                        "description": "Sum expense at one transaction"
+                    },
+                    {
+                        "in": "path",
+                        "name": "comment",
+                        "required": "true",
+                        "type": "string",
+                        "description": "Transaction's comment"
+                    }
+                ],
                 "security": [
                     {
                         "Bearer": []
@@ -297,28 +325,17 @@
             "get": {
                 "tags": [
                     "Transaction"
-                ]
-            },
-            "summary": "Get transactions current user",
-            "parameters": [],
-            "requestBody": {
-                "description": "Registration's object",
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/ListTransactionRequest"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "description": "That's all transactions",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ListTransactionResponse"
+                ],
+                "summary": "Get all transactions",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "That's all transactions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListTransactionResponse"
+                                }
                             }
                         }
                     }
@@ -650,7 +667,7 @@
                     }
                 }
             },
-            "CurrentUserResponse":  {
+            "CurrentUserResponse": {
                 "type": "object",
                 "properties": {
                     "status": {
@@ -1014,14 +1031,171 @@
                         }
                     }
                 }
+            },
+            "ListTransactionResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "All transactions",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "Status code",
+                        "example": "200"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "transactions": {
+                                "type": "array",
+                                "description": "All transactions for all time",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Transaction's id",
+                                            "example": "61911b8b75ac23b9efa47ffd"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Transaction's type",
+                                            "example": "expense"
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "description": "Transaction's categories",
+                                            "example": "Основной"
+                                        },
+                                        "sum": {
+                                            "type": "integer",
+                                            "description": "Transaction's sum for expense or income",
+                                            "example": "6"
+                                        },
+                                        "comment": {
+                                            "type": "string",
+                                            "description": "Comment for add new transaction",
+                                            "example": "Surprise wive"
+                                        },
+                                        "date": {
+                                            "type": "string",
+                                            "description": "Transaction's date",
+                                            "example": "14.11.21"
+                                        },
+                                        "month": {
+                                            "type": "integer",
+                                            "description": "Transaction's month",
+                                            "example": "11"
+                                        },
+                                        "year": {
+                                            "type": "integer",
+                                            "description": "Transaction's yaer",
+                                            "example": "2021"
+                                        },
+                                        "balance": {
+                                            "type": "integer",
+                                            "description": "Main balanse after transaction",
+                                            "example": "3994"
+                                        },
+                                        "owner": {
+                                            "type": "object",
+                                            "properties": {
+                                                "_id": {
+                                                    "type": "string",
+                                                    "description": "Transaction's owner(userId)",
+                                                    "example": "618f8f43a4c9adfc00d3a5a3"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "description": "Transaction's owner(userId)",
+                                                    "format": "email"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "status": "success",
+                    "code": 200,
+                    "data": {
+                        "transactions": [
+                            {
+                                "_id": "61911b8b75ac23b9efa47ffd",
+                                "type": "expense",
+                                "category": "Основной",
+                                "sum": 6,
+                                "comment": "Surprise wive",
+                                "date": "14.11.21",
+                                "month": 11,
+                                "year": 2021,
+                                "balance": "3994",
+                                "owner": {
+                                    "_id": "618f8f43a4c9adfc00d3a5a3",
+                                    "email": "wallet@mail.ru"
+                                }
+                            },
+                            {
+                                "_id": "61913c120b05e98cb1b555b3",
+                                "type": "expense",
+                                "category": "Дом",
+                                "sum": 300,
+                                "comment": "Kitchen",
+                                "date": "14.11.21",
+                                "month": 11,
+                                "year": 2021,
+                                "balance": "3694",
+                                "owner": {
+                                    "_id": "618f8f43a4c9adfc00d3a5a3",
+                                    "email": "wallet@mail.ru"
+                                }
+                            },
+                            {
+                                "_id": "61913c510b05e98cb1b555b7",
+                                "type": "expense",
+                                "category": "Образование",
+                                "sum": 450,
+                                "comment": "Course IT",
+                                "date": "14.11.21",
+                                "month": 11,
+                                "year": 2021,
+                                "balance": "3244",
+                                "owner": {
+                                    "_id": "618f8f43a4c9adfc00d3a5a3",
+                                    "email": "wallet@mail.ru"
+                                }
+                            },
+                            {
+                                "_id": "61913d360b05e98cb1b555bb",
+                                "type": "expense",
+                                "category": "Авто",
+                                "sum": 1000,
+                                "comment": "New engine in car",
+                                "date": "14.11.21",
+                                "month": 11,
+                                "year": 2021,
+                                "balance": "2244",
+                                "owner": {
+                                    "_id": "618f8f43a4c9adfc00d3a5a3",
+                                    "email": "wallet@mail.ru"
+                                }
+                            }
+                        ]
+                    }
+                }
             }
-        }
-    },
-    "securitySchemes": {
-        "Bearer": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
         }
     }
 }
