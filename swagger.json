@@ -17,7 +17,12 @@
     ],
     "servers": [
         {
-            "url": "http://localhost:3030"
+            "url": "http://localhost:3030", 
+            "description": "Local development server"
+        },
+        {
+            "url": "https://fin-project-group4.herokuapp.com",
+            "description": "Development server on Heroku"
         }
     ],
     "tags": [
