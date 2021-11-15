@@ -12,14 +12,6 @@ router.get('/statistics', authenticate, controllerWrapper(ctrl.getStatistics))
 
 router.get('/categories', controllerWrapper(ctrl.getCategories))
 
-router.get('/:transactionId', authenticate, controllerWrapper(ctrl.getById))
-
 router.post('/', authenticate, validator(joiSchema), controllerWrapper(ctrl.add))
-
-router.delete('/:transactionId', authenticate, controllerWrapper(ctrl.removeById))
-
-router.put('/:transactionId', authenticate, validator(joiSchema), controllerWrapper(ctrl.updateById))
-
-router.patch('/:transactionId/favorite', authenticate, controllerWrapper(ctrl.updateTransactionStatusById))
 
 module.exports = router
