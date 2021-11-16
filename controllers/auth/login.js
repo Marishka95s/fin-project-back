@@ -25,7 +25,7 @@ const login = async (req, res) => {
     id: user._id
   }
 
-  const token = `Bearer ${jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' })}`
+  const token = `Bearer ${jwt.sign(payload, SECRET_KEY, { expiresIn: '120m' })}`
   const refreshToken = `Bearer ${crypto.randomBytes(40).toString('hex')}`
   const refreshTokenConection = new RefreshToken({
     user: user._id,
