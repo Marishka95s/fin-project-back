@@ -1,3 +1,4 @@
+const { Unauthorized } = require('http-errors')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 
@@ -10,15 +11,15 @@ const refreshingToken = async (req, res) => {
   if (!authorization) {
     throw new Unauthorized('Not authorized')
   }
+
   const [bearer, token] = authorization.split(' ')
+
   if (bearer !== 'Bearer') {
     throw new Unauthorized('Invalid token')
   }
-  const user = await User.findOne({ authorization })
+  const user = await User.findOne({ token: authorization })
   const userRefreshToken = user.refreshToken
-
   const refreshToken = await RefreshToken.findOne({ userRefreshToken, revoked: null })
-  console.log(refreshToken)
 
   if (!refreshToken || (Date.now() >= refreshToken.expires) || refreshToken.revoked) {
     res.status(400).json({

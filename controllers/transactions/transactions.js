@@ -88,8 +88,8 @@ const getStatistics = async (req, res, next) => {
         default:
           break
       }
-      return result
     }
+    return result
   }, {
     income: 0,
     expenseAll: 0,
