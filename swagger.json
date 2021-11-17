@@ -40,7 +40,7 @@
         }
     ],
     "paths": {
-        "/auth/register": {
+        "/auth/signup": {
             "post": {
                 "tags": [
                     "Auth"
@@ -49,10 +49,24 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "signup",
+                        "name": "email",
                         "required": "true",
                         "type": "string",
-                        "description": "User's email, password and name"
+                        "description": "User's email"
+                    },
+                    {
+                        "in": "path",
+                        "name": "password",
+                        "required": "true",
+                        "type": "string",
+                        "description": "User's password"
+                    },
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "required": "true",
+                        "type": "string",
+                        "description": "User's name"
                     }
                 ],
                 "security": [
@@ -261,12 +275,12 @@
                 }
             }
         },
-        "/transactions/add": {
+        "/transactions": {
             "post": {
                 "tags": [
                     "Transaction"
                 ],
-                "summary": "Get transactions current user",
+                "summary": "Add transaction current user",
                 "parameters": [
                     {
                         "in": "path",
@@ -281,7 +295,8 @@
                         "required": "true",
                         "type": "string",
                         "description": "Transaction's category(Основной,Еда,Авто,Развитие,Дети,Дом,Образование,Остальные)"
-                    },{
+                    },
+                    {
                         "in": "path",
                         "name": "sum",
                         "required": "true",
@@ -324,9 +339,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/transactions/listTransactions": {
+            },
             "get": {
                 "tags": [
                     "Transaction"
@@ -382,123 +395,6 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/CategoriesTransactionResponse"
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/:transactionId/getById": {
-            "get": {
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Get transaction by transactionId",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/GetByIdTransactionResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/:transactionId/removeById": {
-            "delete": {
-                "tags": [
-                    "Transaction"
-                ]
-            },
-            "summary": "Get transactions current user",
-            "parameters": [],
-            "requestBody": {
-                "description": "Registration's object",
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/RemoveTransactionRequest"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "description": "That's all transactions",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RemoveTransactionResponse"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/:transactionId/updateById": {
-            "put": {
-                "tags": [
-                    "Transaction"
-                ]
-            },
-            "summary": "Update transaction by transactionId",
-            "parameters": [],
-            "requestBody": {
-                "description": "Registration's object",
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/UpdateByIdTransactionRequest"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "description": "That's all transactions",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UpdateByIdTransactionResponse"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/:transactionId/favorite": {
-            "patch": {
-                "tags": [
-                    "Transaction"
-                ]
-            },
-            "summary": "Get transactions current user",
-            "parameters": [],
-            "requestBody": {
-                "description": "Registration's object",
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/FavoriteTransactionRequest"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "description": "That's all transactions",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FavoriteTransactionResponse"
                             }
                         }
                     }
@@ -945,91 +841,6 @@
                                         "type": "integer",
                                         "description": "Expense's others",
                                         "example": "0"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "GetByIdTransactionResponse": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "description": "Status added transaction",
-                        "example": "successfully created"
-                    },
-                    "code": {
-                        "type": "integer",
-                        "description": "Status code",
-                        "example": "201"
-                    },
-                    "data": {
-                        "type": "object",
-                        "properties": {
-                            "result": {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "type": "string",
-                                        "description": "Transaction's type",
-                                        "example": "expense"
-                                    },
-                                    "category": {
-                                        "type": "string",
-                                        "description": "Transaction's categories",
-                                        "example": "Основной"
-                                    },
-                                    "sum": {
-                                        "type": "integer",
-                                        "description": "Transaction's sum for expense or income",
-                                        "example": "6"
-                                    },
-                                    "comment": {
-                                        "type": "string",
-                                        "description": "Comment for add new transaction",
-                                        "example": "Surprise wive"
-                                    },
-                                    "date": {
-                                        "type": "string",
-                                        "description": "Transaction's date",
-                                        "example": "14.11.21"
-                                    },
-                                    "month": {
-                                        "type": "integer",
-                                        "description": "Transaction's month",
-                                        "example": "11"
-                                    },
-                                    "year": {
-                                        "type": "integer",
-                                        "description": "Transaction's yaer",
-                                        "example": "2021"
-                                    },
-                                    "balance": {
-                                        "type": "integer",
-                                        "description": "Main balanse after transaction",
-                                        "example": "3994"
-                                    },
-                                    "owner": {
-                                        "type": "string",
-                                        "description": "Transaction's owner(userId)",
-                                        "example": "2021"
-                                    },
-                                    "_id": {
-                                        "type": "string",
-                                        "description": "Transaction's id",
-                                        "example": "61911b8b75ac23b9efa47ffd"
-                                    },
-                                    "createdAt": {
-                                        "type": "string",
-                                        "description": "Time create transaction",
-                                        "example": "2021-11-14T14:22:03.596Z"
-                                    },
-                                    "updatedAt": {
-                                        "type": "string",
-                                        "description": "Time update transaction",
-                                        "example": "2021-11-14T14:22:03.596Z"
                                     }
                                 }
                             }
