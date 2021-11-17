@@ -38,8 +38,8 @@ const add = async (req, res, next) => {
     balance
   }
   try {
-    await User.findByIdAndUpdate(user._id, { balance: balance }, { new: true })
     const result = await Transaction.create(newTransaction)
+    await User.findByIdAndUpdate(user._id, { balance: balance }, { new: true })
     res.status(201).json({
       status: 'successfully created',
       code: 201,
@@ -88,8 +88,8 @@ const getStatistics = async (req, res, next) => {
         default:
           break
       }
-      return result
     }
+    return result
   }, {
     income: 0,
     expenseAll: 0,

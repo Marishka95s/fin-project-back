@@ -11,7 +11,6 @@ const logout = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  // пуш токена в блек лист//
   await User.findByIdAndUpdate(_id, { token: null, refreshToken: null })
 
   res.status(204).json()
