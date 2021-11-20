@@ -7,7 +7,7 @@ const listTransactions = async (req, res, next) => {
   const { page = 1, limit = 8 } = req.query
   const skip = (page - 1) * limit
   const { _id } = req.user
-  const transactions = await Transaction.find({ owner: _id }, '_id type category sum comment date month year balance owner ', { skip, limit: +limit }).populate('owner', 'email')
+  const transactions = await Transaction.find({ owner: _id }, '_id type category sum comment date month year balance owner createdAt', { skip, limit: +limit }).populate('owner', 'email')
   res.json({
     status: 'success',
     code: 200,
