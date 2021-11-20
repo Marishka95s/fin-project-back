@@ -20,7 +20,7 @@ const listTransactions = async (req, res, next) => {
 const add = async (req, res, next) => {
   const { user } = req
   let balance = Number(user.get('balance'))
-  if(typeof(req.body.sum) !== 'number') {
+  if (typeof (req.body.sum) !== 'number') {
     throw new Error('Wrong type of sum')
   }
   req.body.type === 'income' ? balance += req.body.sum : balance -= req.body.sum
@@ -56,14 +56,19 @@ const add = async (req, res, next) => {
 }
 
 const getStatistics = async (req, res, next) => {
-  const { month = new Date().getMonth() + 1, year = new Date().getFullYear() } = req.body
+  let { month = new Date().getMonth() + 1, year = new Date().getFullYear() } = req.query
+  month = Number(month)
+  year = Number(year)
+  if (isNaN(month) || month < 1 || month > 12 || isNaN(year)) {
+    throw new Error('Неверно переданны параметры даты.')
+  }
   const { _id } = req.user
   const transactions = await Transaction.find({ owner: _id, month, year }, 'type category sum balance')
   if (!transactions) {
-    res.status(404).json({
+    res.status(500).json({
       status: 'error',
-      code: 404,
-      message: 'Транзакций за указаный период ненайдено'
+      code: 500,
+      message: 'Ошибка сервера'
     })
     return
   }
