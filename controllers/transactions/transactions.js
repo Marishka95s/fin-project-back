@@ -20,6 +20,9 @@ const listTransactions = async (req, res, next) => {
 const add = async (req, res, next) => {
   const { user } = req
   let balance = Number(user.get('balance'))
+  if(typeOf(req.body.sum) !== 'number') {
+    throw new Error('Wrong type of sum')
+  }
   req.body.type === 'income' ? balance += req.body.sum : balance -= req.body.sum
   if (balance < 0) {
     res.status(400).json({
