@@ -4,12 +4,10 @@ const { User } = require('../../schemas')
 const { categories } = require('../../schemas')
 
 const listTransactions = async (req, res, next) => {
-  // const { page = 1, limit = 8 } = req.query
-  // const skip = (page - 1) * limit
+  const { page = 1, limit = 20 } = req.query
+  const skip = (page - 1) * limit
   const { _id } = req.user
-  const transactions = await Transaction.find({ owner: _id }, '_id type category sum comment date month year balance owner createdAt',
-  // { skip, limit: +limit }
-  ).populate('owner', 'email').sort({ createdAt: -1 })
+  const transactions = await Transaction.find({ owner: _id }, '_id type category sum comment date month year balance owner createdAt', { skip, limit: +limit }).populate('owner', 'email').sort({ createdAt: -1 })
   res.json({
     status: 'success',
     code: 200,
