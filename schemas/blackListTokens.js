@@ -10,6 +10,7 @@ const blackListSchema = new Schema({
     ref: 'user'
   },
 }, { versionKey: false, timestamps: true })
+
 const BlackList = model('blackList', blackListSchema)
 module.exports = {
   BlackList,

@@ -16,7 +16,7 @@ const login = async (req, res) => {
     })
     return
   }
-  
+
   const user = await User.findOne({ email })
   if (!user || !user.comparePassword(password)) {
     throw new Unauthorized('Email or password is wrong')
@@ -33,7 +33,7 @@ const login = async (req, res) => {
     token: refreshToken,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7d try
   })
-  
+
   await refreshTokenConection.save()
   await User.findByIdAndUpdate(user._id, { token, refreshToken, refreshTokenConection })
   const updatedUser = await User.findOne({ email })

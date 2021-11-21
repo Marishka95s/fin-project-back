@@ -17,6 +17,7 @@ const refreshingToken = async (req, res) => {
   if (bearer !== 'Bearer') {
     throw new Unauthorized('Invalid token')
   }
+
   const user = await User.findOne({ token: authorization })
   const userRefreshToken = user.refreshToken
   const refreshToken = await RefreshToken.findOne({ userRefreshToken, revoked: null })
@@ -38,8 +39,8 @@ const refreshingToken = async (req, res) => {
     token: newRefreshToken,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   })
-  refreshToken.replacedByToken = newRefreshTokenConection.token
 
+  refreshToken.replacedByToken = newRefreshTokenConection.token
   await refreshToken.save()
   await newRefreshTokenConection.save()
   await User.findByIdAndUpdate(user._id, { token, refreshToken: newRefreshToken, refreshTokenConection: newRefreshTokenConection })

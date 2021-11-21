@@ -7,6 +7,7 @@ const current = async(req, res) => {
   if (!user) {
     throw new Unauthorized('Not authorized')
   }
+
   res.status(200).json({
     status: 'success',
     code: 200,
@@ -15,4 +16,5 @@ const current = async(req, res) => {
     }
   })
 }
+
 module.exports = current
