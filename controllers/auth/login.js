@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const { User, RefreshToken } = require('../../schemas')
 
 const { SECRET_KEY } = process.env
+const EXPIRING_TOKEN_TIME = 7 * 24 * 60 * 60 * 1000
 
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -31,7 +32,7 @@ const login = async (req, res) => {
   const refreshTokenConection = new RefreshToken({
     user: user._id,
     token: refreshToken,
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7d try
+    expires: new Date(Date.now() + EXPIRING_TOKEN_TIME)
   })
 
   await refreshTokenConection.save()
