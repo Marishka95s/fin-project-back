@@ -7,12 +7,12 @@ const categories = ['Основной', 'Еда', 'Авто', 'Развитие'
 const transactionSchema = Schema({
   type: {
     type: String,
-    required: [true, 'Set type for transaction'],
+    required: [true, 'Установите тип транзакции'],
     enum: ['expense', 'income'],
   },
   category: {
     type: String,
-    required: [true, 'Set category for transaction'],
+    required: [true, 'Установите категорию транзакции'],
     enum: categories,
   },
   sum: {
@@ -53,7 +53,7 @@ const transactionSchema = Schema({
 
 const joiSchema = Joi.object({
   type: Joi.string().valid('expense', 'income').required(),
-  category: Joi.string().valid('Основной', 'Еда', 'Авто', 'Развитие', 'Дети', 'Дом', 'Образование', 'Остальные').required(),
+  category: Joi.string().valid(...categories).required(),
   sum: Joi.number().min(0).required(),
   comment: Joi.string()
 })

@@ -20,7 +20,7 @@ const login = async (req, res) => {
 
   const user = await User.findOne({ email })
   if (!user || !user.comparePassword(password)) {
-    throw new Unauthorized('Email or password is wrong')
+    throw new Unauthorized('Неверный логин или пароль')
   }
 
   const payload = {

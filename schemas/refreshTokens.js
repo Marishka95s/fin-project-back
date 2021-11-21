@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose')
-// const Joi = require('joi')
 
 const refreshTokenSchema = new Schema({
   token: {

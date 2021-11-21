@@ -9,13 +9,13 @@ const authenticate = async (req, res, next) => {
   const { authorization } = req.headers
 
   if (!authorization) {
-    throw new Unauthorized('Not authorized')
+    throw new Unauthorized('Вы неавторезированны!')
   }
 
   const [bearer, token] = authorization.split(' ')
 
   if (bearer !== 'Bearer') {
-    throw new Unauthorized('Invalid token')
+    throw new Unauthorized('Неправильный токен')
   }
 
   try {
@@ -27,14 +27,14 @@ const authenticate = async (req, res, next) => {
     })
 
     if (!user || !user.token || isTokenInBlackList) {
-      throw new Unauthorized('Invalid token')
+      throw new Unauthorized('Неправильный токен')
     }
 
     req.user = user
     next()
   } catch (error) {
     error.status = 401
-    error.message = 'Not authorized'
+    error.message = 'Вы неавторезированны!'
     next(error)
   }
 }

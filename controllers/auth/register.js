@@ -16,7 +16,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email })
 
   if (user) {
-    throw new Conflict('Email in use')
+    throw new Conflict('Такая почта уже используется')
   }
 
   const newUser = new User({ email, name, token: null, refreshToken: null, balance: 0, refreshTokenConection: null })
@@ -27,7 +27,7 @@ const register = async (req, res) => {
   res.status(201).json({
     status: 'success',
     code: 201,
-    message: 'Registred success',
+    message: 'Регистрация прошла успешно',
     result
   })
 }

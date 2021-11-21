@@ -27,7 +27,7 @@ const add = async (req, res, next) => {
   let balance = Number(user.get('balance'))
 
   if (typeof (req.body.sum) !== 'number') {
-    throw new Error('Wrong type of sum')
+    throw new Error('Неверный тип поля sum')
   }
 
   req.body.type === 'income' ? balance += req.body.sum : balance -= req.body.sum
@@ -36,7 +36,7 @@ const add = async (req, res, next) => {
     res.status(400).json({
       status: 'Bad Request',
       code: 400,
-      message: 'Ошибка недостаточно средств на счету'
+      message: 'Недостаточно средств на счету'
     })
     return
   }
@@ -53,7 +53,7 @@ const add = async (req, res, next) => {
     const result = await Transaction.create(newTransaction)
     await User.findByIdAndUpdate(user._id, { balance: balance }, { new: true })
     res.status(201).json({
-      status: 'successfully created',
+      status: 'success',
       code: 201,
       data: {
         result

@@ -22,11 +22,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/transactions', transactionsRouter);
 
 app.use((_, res) => {
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json({ message: 'Упс не найдено :) ' });
 });
 
 app.use((err, req, res, next) => {
-  const { status = 500, message = 'Server error' } = err;
+  const { status = 500, message = 'Ошибка сервера' } = err;
   res.status(status).json({ message });
 });
 
