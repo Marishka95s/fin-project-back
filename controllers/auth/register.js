@@ -29,7 +29,7 @@ const register = async (req, res) => {
     code: 201,
     message: 'Регистрация прошла успешно',
     result
-  })
+  }).redirect('/fin-project-front/home')
 }
 
 module.exports = register
