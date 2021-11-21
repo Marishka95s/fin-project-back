@@ -11,6 +11,7 @@ const register = async (req, res) => {
     })
     return
   }
+  
   const { email, password, name } = req.body
   const user = await User.findOne({ email })
 
