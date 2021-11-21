@@ -7,17 +7,17 @@ const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@
 const userSchema = Schema({
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: [true, 'Пароль обязателен'],
   },
   email: {
     type: String,
-    required: [true, 'Email is required'],
+    required: [true, 'Почта обязательна'],
     unique: true,
     match: emailRegex
   },
   name: {
     type: String,
-    required: [true, 'Name is required']
+    required: [true, 'Имя обязательно']
   },
   balance: {
     type: Number,

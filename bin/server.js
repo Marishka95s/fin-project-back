@@ -12,7 +12,7 @@ mongoose
   })
   .then(() => {
     app.listen(PORT);
-    console.log(`Database connection successful on port ${PORT} `);
+    console.log(`База данных запущена на порту ${PORT} `);
   })
   .catch((error) => {
     console.log(error.message);
