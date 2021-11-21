@@ -6,11 +6,13 @@ const logout = async (req, res, next) => {
     token: token,
     user: _id,
   }
+  
   try {
     await BlackList.create(newBlackList)
   } catch (error) {
     next(error)
   }
+  
   await User.findByIdAndUpdate(_id, { token: null, refreshToken: null })
 
   res.status(204).json()
