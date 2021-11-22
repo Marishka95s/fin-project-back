@@ -2,7 +2,7 @@
 const { Schema, model } = require('mongoose')
 const Joi = require('joi')
 
-const categories = ['Основной', 'Еда', 'Авто', 'Развитие', 'Дети', 'Дом', 'Образование', 'Остальные']
+const categories = ['Основной', 'Дополнительный', 'Еда', 'Авто', 'Развитие', 'Дети', 'Дом', 'Образование', 'Остальные']
 
 const transactionSchema = Schema({
   type: {

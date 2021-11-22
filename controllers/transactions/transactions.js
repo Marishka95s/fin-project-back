@@ -94,6 +94,8 @@ const getStatistics = async (req, res, next) => {
       switch (number.category) {
         case 'Основной': result.expenseCategory.Basic += number.sum
           break;
+        case 'Дополнительный': result.expenseCategory.Additional += number.sum
+          break;
         case 'Еда': result.expenseCategory.Food += number.sum
           break;
         case 'Авто': result.expenseCategory.Auto += number.sum
@@ -118,6 +120,7 @@ const getStatistics = async (req, res, next) => {
     expenseAll: 0,
     expenseCategory: {
       Basic: 0,
+      Additional: 0,
       Food: 0,
       Auto: 0,
       Development: 0,
