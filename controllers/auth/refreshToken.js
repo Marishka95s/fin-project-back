@@ -12,13 +12,13 @@ const refreshingToken = async (req, res) => {
   if (!authorization) {
     throw new Unauthorized('Вы неавторезированны!')
   }
-  const [bearer] = authorization.split(' ')
+  // const [bearer] = authorization.split(' ')
 
-  if (bearer !== 'Bearer') {
-    throw new Unauthorized('Неправильный токен')
-  }
+  // if (bearer !== 'Bearer') {
+  //   throw new Unauthorized('Неправильный токен')
+  // }
 
-  const userRefreshToken = req.user.refreshToken
+  const userRefreshToken = req.headers.RefreshToken
   const refreshToken = await RefreshToken.findOne({ userRefreshToken, revoked: null })
 
   if (!refreshToken || (Date.now() >= refreshToken.expires) || refreshToken.revoked) {

@@ -14,6 +14,6 @@ router.get('/logout', authenticate, controllerWrapper(ctrl.logout))
 
 router.get('/current', authenticate, controllerWrapper(ctrl.current))
 
-router.post('/refresh-token', authenticate, controllerWrapper(ctrl.refreshingToken))
+router.post('/refresh-token', controllerWrapper(ctrl.refreshingToken))
 
 module.exports = router
